@@ -540,6 +540,36 @@ func (cli *Client) SendVideo(roomID, body, url string) (*RespSendEvent, error) {
 		})
 }
 
+// SendAudio sends an m.room.message event into the given room with a msgtype of m.audio
+// See https://matrix.org/docs/spec/client_server/r0.2.0.html#m-audio
+func (cli *Client) SendAudio(roomID, body, url, mimetype string, size uint) (*RespSendEvent, error) {
+	return cli.SendMessageEvent(roomID, "m.room.message",
+		AudioMessage{
+			MsgType: "m.audio",
+			Body:    body,
+			URL:     url,
+			Info: AudioInfo{
+				Size:     size,
+				Mimetype: mimetype,
+			},
+		})
+}
+
+// SendFile sends an m.room.message event into the given room with a msgtype of m.file
+// See https://matrix.org/docs/spec/client_server/r0.2.0.html#m-file
+func (cli *Client) SendFile(roomID, body, url, mimetype string, size uint) (*RespSendEvent, error) {
+	return cli.SendMessageEvent(roomID, "m.room.message",
+		FileMessage{
+			MsgType: "m.file",
+			Body:    body,
+			URL:     url,
+			Info: FileInfo{
+				Size:     size,
+				Mimetype: mimetype,
+			},
+		})
+}
+
 // SendNotice sends an m.room.message event into the given room with a msgtype of m.notice
 // See http://matrix.org/docs/spec/client_server/r0.2.0.html#m-notice
 func (cli *Client) SendNotice(roomID, text string) (*RespSendEvent, error) {
